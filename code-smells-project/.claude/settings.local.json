@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pip install *)",
+      "Bash(pip3 install *)",
+      "Bash(.venv/bin/pip install *)",
+      "Bash(.venv/bin/python -c \"from app import create_app; app = create_app\\(\\); print\\('OK: app criado sem erros'\\)\")",
+      "Bash(.venv/bin/python app.py)",
+      "Bash(curl -s http://localhost:5000/health)",
+      "Bash(curl -s http://localhost:5000/produtos/)",
+      "Bash(curl -s -X POST http://localhost:5000/login -H \"Content-Type: application/json\" -d '{\"email\":\"admin@loja.com\",\"senha\":\"admin123\"}')",
+      "Bash(.venv/bin/python -c ' *)",
+      "Bash(curl -s http://localhost:5001/health)",
+      "Bash(curl -s http://localhost:5001/produtos/)",
+      "Bash(curl -s -X POST http://localhost:5001/login -H \"Content-Type: application/json\" -d '{\"email\":\"admin@loja.com\",\"senha\":\"admin123\"}')",
+      "Bash(curl -s -X POST http://localhost:5001/admin/query -H \"Content-Type: application/json\" -d '{\"sql\":\"SELECT * FROM usuarios\"}')"
+    ]
+  }
+}

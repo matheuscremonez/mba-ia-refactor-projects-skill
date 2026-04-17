@@ -1,14 +1,24 @@
+require('dotenv').config();
 const express = require('express');
-const AppManager = require('./AppManager');
-const { config } = require('./utils');
+const { initDb } = require('./config/database');
+const checkoutRoutes = require('./routes/checkoutRoutes');
+const reportRoutes = require('./routes/reportRoutes');
+const userRoutes = require('./routes/userRoutes');
 
 const app = express();
 app.use(express.json());
 
-const manager = new AppManager();
-manager.initDb();
-manager.setupRoutes(app);
+app.use('/api/checkout', checkoutRoutes);
+app.use('/api/admin', reportRoutes);
+app.use('/api/users', userRoutes);
 
-app.listen(config.port, () => {
-    console.log(`Frankenstein LMS rodando na porta ${config.port}...`);
+const PORT = process.env.PORT || 3000;
+
+initDb().then(() => {
+  app.listen(PORT, () => {
+    console.log(`LMS API rodando na porta ${PORT}`);
+  });
+}).catch(err => {
+  console.error('Erro ao inicializar banco de dados:', err);
+  process.exit(1);
 });
