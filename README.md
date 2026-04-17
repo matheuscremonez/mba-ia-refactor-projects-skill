@@ -189,6 +189,35 @@ routes/     → produto_routes.py, usuario_routes.py, pedido_routes.py
 utils/      → validators.py
 ```
 
+**Evidência de execução:**
+
+```
+$ python3 app.py
+ * Serving Flask app 'app'
+ * Debug mode: off
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5002
+INFO:werkzeug: GET /health HTTP/1.1" 200
+INFO:werkzeug: GET /produtos/ HTTP/1.1" 200
+
+$ curl -s http://localhost:5002/health | jq
+{
+  "counts": { "pedidos": 0, "produtos": 10, "usuarios": 3 },
+  "database": "connected",
+  "status": "ok",
+  "versao": "1.0.0"
+}
+
+$ curl -s http://localhost:5002/produtos/ | jq
+{
+  "dados": [
+    { "id": 1, "nome": "Notebook Gamer", "preco": 5999.99, "categoria": "informatica", ... },
+    { "id": 2, "nome": "Mouse Wireless", "preco": 89.9, ... },
+    ...
+  ]
+}
+```
+
 **Checklist de validação:**
 - [x] Linguagem detectada corretamente (Python + Flask 3.1.1)
 - [x] Domínio detectado corretamente (E-commerce API)
@@ -201,6 +230,7 @@ utils/      → validators.py
 - [x] SQL Injection corrigido com queries parametrizadas (`?`)
 - [x] Endpoint `/admin/query` removido
 - [x] Senhas protegidas com bcrypt
+- [x] Aplicação inicia sem erros (HTTP 200 em `/health` e `/produtos/`)
 
 ---
 
@@ -225,6 +255,27 @@ src/controllers/ → checkoutController.js, reportController.js, userController.
 src/routes/     → checkoutRoutes.js, reportRoutes.js, userRoutes.js
 ```
 
+**Evidência de execução:**
+
+```
+$ node src/app.js
+LMS API rodando na porta 3000
+
+$ curl -s http://localhost:3000/api/admin/financial-report | jq
+[
+  {
+    "course": "Clean Architecture",
+    "revenue": 997,
+    "students": [{ "student": "Leonan", "paid": 997 }]
+  },
+  {
+    "course": "Docker",
+    "revenue": 0,
+    "students": []
+  }
+]
+```
+
 **Checklist de validação:**
 - [x] Linguagem detectada corretamente (Node.js + Express)
 - [x] Domínio detectado corretamente (LMS / Plataforma de Cursos)
@@ -236,6 +287,7 @@ src/routes/     → checkoutRoutes.js, reportRoutes.js, userRoutes.js
 - [x] Credenciais de produção removidas de `utils.js` → `process.env`
 - [x] `badCrypto()` substituída por `bcrypt`
 - [x] Estado global mutável (`globalCache`, `totalRevenue`) eliminado
+- [x] Aplicação inicia sem erros (HTTP 200 em `/api/admin/financial-report`)
 
 ---
 
@@ -260,6 +312,27 @@ controllers/ → task_controller.py, user_controller.py, report_controller.py  �
 routes/      → lógica extraída para controllers
 services/    → inalterados
 utils/       → inalterados
+```
+
+**Evidência de execução:**
+
+```
+$ python3 app.py
+ * Serving Flask app 'app'
+ * Debug mode: off
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5003
+127.0.0.1 - "GET /health HTTP/1.1" 200
+127.0.0.1 - "GET /tasks HTTP/1.1" 200
+
+$ curl -s http://localhost:5003/health | jq
+{
+  "status": "ok",
+  "timestamp": "2026-04-17 11:37:06.474592"
+}
+
+$ curl -s http://localhost:5003/tasks | jq
+[]
 ```
 
 **Checklist de validação:**
