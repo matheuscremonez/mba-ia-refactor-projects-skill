@@ -166,16 +166,110 @@ curl http://localhost:5000/health
 
 ## 4. Resultados da Execução
 
-*Esta seção será preenchida após a execução da skill em cada projeto.*
+Relatórios completos disponíveis em [`reports/`](./reports/).
 
 ### code-smells-project
 
-*(executar `claude "/refactor-arch"` no diretório do projeto)*
+**Perfil detectado:** MONOLITO  
+**Findings:** 21 total — 11 CRITICAL, 6 HIGH, 2 MEDIUM, 2 LOW  
+**Relatório:** [`reports/audit-project-1.md`](./reports/audit-project-1.md)
+
+**Estrutura antes:**
+```
+app.py / models.py / controllers.py / database.py
+(sem subpastas, tudo misturado)
+```
+
+**Estrutura depois:**
+```
+app.py / config.py / .env.example
+models/     → produto.py, usuario.py, pedido.py
+controllers/ → produto_controller.py, usuario_controller.py, pedido_controller.py
+routes/     → produto_routes.py, usuario_routes.py, pedido_routes.py
+utils/      → validators.py
+```
+
+**Checklist de validação:**
+- [x] Linguagem detectada corretamente (Python + Flask 3.1.1)
+- [x] Domínio detectado corretamente (E-commerce API)
+- [x] Perfil classificado corretamente (MONOLITO)
+- [x] Fase 2 encontrou ≥ 5 findings (21 encontrados)
+- [x] Pelo menos 1 CRITICAL detectado (11 CRITICAL)
+- [x] Skill pausou e pediu confirmação antes da Fase 3
+- [x] Estrutura MVC criada após refatoração
+- [x] Credenciais migradas para `config.py` + `.env.example`
+- [x] SQL Injection corrigido com queries parametrizadas (`?`)
+- [x] Endpoint `/admin/query` removido
+- [x] Senhas protegidas com bcrypt
+
+---
 
 ### ecommerce-api-legacy
 
-*(executar `claude "/refactor-arch"` no diretório do projeto)*
+**Perfil detectado:** PARCIALMENTE_ORGANIZADO  
+**Findings:** 11 total — 4 CRITICAL, 4 HIGH, 2 MEDIUM, 1 LOW  
+**Relatório:** [`reports/audit-project-2.md`](./reports/audit-project-2.md)
+
+**Estrutura antes:**
+```
+src/AppManager.js  (God Class — 141 linhas: DB + rotas + checkout + relatório)
+src/utils.js       (credenciais de produção hardcoded)
+```
+
+**Estrutura depois:**
+```
+src/app.js / .env.example
+src/config/     → database.js
+src/models/     → userModel.js, courseModel.js, enrollmentModel.js
+src/controllers/ → checkoutController.js, reportController.js, userController.js
+src/routes/     → checkoutRoutes.js, reportRoutes.js, userRoutes.js
+```
+
+**Checklist de validação:**
+- [x] Linguagem detectada corretamente (Node.js + Express)
+- [x] Domínio detectado corretamente (LMS / Plataforma de Cursos)
+- [x] Perfil classificado corretamente (PARCIALMENTE_ORGANIZADO)
+- [x] Fase 2 encontrou ≥ 5 findings (11 encontrados)
+- [x] Pelo menos 1 CRITICAL detectado (4 CRITICAL)
+- [x] Skill pausou e pediu confirmação antes da Fase 3
+- [x] God Class `AppManager.js` quebrada em camadas separadas
+- [x] Credenciais de produção removidas de `utils.js` → `process.env`
+- [x] `badCrypto()` substituída por `bcrypt`
+- [x] Estado global mutável (`globalCache`, `totalRevenue`) eliminado
+
+---
 
 ### task-manager-api
 
-*(executar `claude "/refactor-arch"` no diretório do projeto)*
+**Perfil detectado:** ESTRUTURADO_COM_PROBLEMAS  
+**Findings:** 9 total — 1 CRITICAL, 3 HIGH, 3 MEDIUM, 2 LOW  
+**Relatório:** [`reports/audit-project-3.md`](./reports/audit-project-3.md)
+
+**Estrutura antes:**
+```
+app.py (SECRET_KEY hardcoded)
+models/ routes/ services/ utils/
+(estrutura existente, mas lógica pesada nas routes e APIs deprecated)
+```
+
+**Estrutura depois:**
+```
+app.py / config.py / .env.example
+models/      → inalterados (já corretos)
+controllers/ → task_controller.py, user_controller.py, report_controller.py  ← NOVO
+routes/      → lógica extraída para controllers
+services/    → inalterados
+utils/       → inalterados
+```
+
+**Checklist de validação:**
+- [x] Linguagem detectada corretamente (Python + Flask + SQLAlchemy)
+- [x] Domínio detectado corretamente (Task Manager API)
+- [x] Perfil classificado corretamente (ESTRUTURADO_COM_PROBLEMAS)
+- [x] Fase 2 encontrou ≥ 5 findings (9 encontrados)
+- [x] Pelo menos 1 CRITICAL detectado (SECRET_KEY hardcoded)
+- [x] Skill pausou e pediu confirmação antes da Fase 3
+- [x] `User.query.get()` substituído por `db.session.get(User, id)`
+- [x] Lógica extraída das routes para `controllers/` (cirurgicamente)
+- [x] Estrutura existente preservada onde já estava correta
+- [x] MD5 substituído por bcrypt em `models/user.py`
