@@ -94,6 +94,9 @@ Execute a refatoração conforme:
 **Ações obrigatórias em qualquer perfil:**
 - Extrair credenciais hardcoded para variáveis de ambiente
   (criar `.env.example` com as variáveis necessárias, **sem valores reais**)
+- Garantir carregamento do `.env` na inicialização da aplicação:
+  - Python: adicionar `python-dotenv` ao `requirements.txt` e `from dotenv import load_dotenv; load_dotenv()` no topo do `app.py`
+  - Node.js: adicionar `dotenv` ao `package.json` e `require('dotenv').config()` no topo do `app.js`
 - Corrigir SQL Injection com queries parametrizadas
 - Remover endpoints perigosos (execução arbitrária de SQL ou código)
 - Corrigir uso de APIs deprecated

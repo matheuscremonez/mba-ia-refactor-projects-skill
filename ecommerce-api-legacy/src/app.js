@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const { initDb } = require('./config/database');
 const checkoutRoutes = require('./routes/checkoutRoutes');
