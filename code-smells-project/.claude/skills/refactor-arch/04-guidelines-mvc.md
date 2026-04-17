@@ -56,7 +56,7 @@ def create_app():
 
 if __name__ == '__main__':
     app = create_app()
-    app.run(debug=os.environ.get('FLASK_DEBUG', 'false').lower() == 'true')
+    app.run(host='0.0.0.0', port=Config.PORT, debug=Config.DEBUG)
 ```
 
 ### config.py
@@ -68,6 +68,7 @@ class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY', 'dev-fallback-nao-usar-producao')
     DATABASE_URL = os.environ.get('DATABASE_URL', 'app.db')
     DEBUG = os.environ.get('FLASK_DEBUG', 'false').lower() == 'true'
+    PORT = int(os.environ.get('PORT', 5000))
 ```
 
 ### models/product.py (acesso a dados)
@@ -281,6 +282,8 @@ SECRET_KEY=
 DATABASE_URL=
 FLASK_DEBUG=false
 PORT=5000
+# Node.js apenas:
+# PORT=3000
 ```
 
 **Regras:**

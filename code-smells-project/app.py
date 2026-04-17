@@ -75,4 +75,4 @@ def create_app():
 if __name__ == '__main__':
     app = create_app()
     get_db()
-    app.run(host='0.0.0.0', port=5000, debug=Config.DEBUG)
+    app.run(host='0.0.0.0', port=Config.PORT, debug=Config.DEBUG)
