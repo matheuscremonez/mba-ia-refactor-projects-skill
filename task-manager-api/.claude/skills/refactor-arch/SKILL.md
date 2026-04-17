@@ -68,7 +68,12 @@ os 10 anti-patterns do catálogo em `02-catalogo-antipatterns.md`.
 Ao finalizar a varredura, gere o relatório **exatamente** no formato definido
 em `03-template-relatorio.md`.
 
-Após imprimir o relatório completo, **pause a execução** e pergunte:
+**Salve o relatório em arquivo:**
+- Determine o número do projeto: `code-smells-project` → 1, `ecommerce-api-legacy` → 2, `task-manager-api` → 3
+- Crie a pasta `../reports/` se não existir (relativa à raiz do repositório, um nível acima do projeto)
+- Salve o relatório completo em `../reports/audit-project-[N].md`
+
+Após imprimir o relatório completo e salvá-lo, **pause a execução** e pergunte:
 
 ```
 Prosseguir com a refatoração? (Fase 3 irá modificar arquivos do projeto) [s/n]:
