@@ -1,6 +1,9 @@
 .env
 node_modules/
 
+# Superpowers internal docs
+docs/superpowers/
+
 # Python
 __pycache__/
 *.pyc
@@ -10,3 +13,6 @@ venv/
 # SQLite
 *.db
 instance/
+
+# Claude CLI settings
+.claude/settings.local.json

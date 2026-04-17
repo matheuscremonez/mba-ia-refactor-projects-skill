@@ -1,13 +1,14 @@
 import sqlite3
-import os
+import bcrypt
+from config import Config
 
 db_connection = None
-db_path = "loja.db"
+
 
 def get_db():
     global db_connection
     if db_connection is None:
-        db_connection = sqlite3.connect(db_path, check_same_thread=False)
+        db_connection = sqlite3.connect(Config.DATABASE_URL, check_same_thread=False)
         db_connection.row_factory = sqlite3.Row
         cursor = db_connection.cursor()
 
@@ -72,15 +73,17 @@ def get_db():
                 produtos
             )
 
-            usuarios = [
+            seed_usuarios = [
                 ("Admin", "admin@loja.com", "admin123", "admin"),
                 ("João Silva", "joao@email.com", "123456", "cliente"),
                 ("Maria Santos", "maria@email.com", "senha123", "cliente"),
             ]
-            cursor.executemany(
-                "INSERT INTO usuarios (nome, email, senha, tipo) VALUES (?, ?, ?, ?)",
-                usuarios
-            )
+            for nome, email, senha_plain, tipo in seed_usuarios:
+                senha_hash = bcrypt.hashpw(senha_plain.encode('utf-8'), bcrypt.gensalt())
+                cursor.execute(
+                    "INSERT INTO usuarios (nome, email, senha, tipo) VALUES (?, ?, ?, ?)",
+                    (nome, email, senha_hash, tipo)
+                )
             db_connection.commit()
 
     return db_connection
