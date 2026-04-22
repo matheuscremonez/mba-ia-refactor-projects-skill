@@ -22,9 +22,12 @@ análise, auditoria e refatoração de projetos legados para o padrão MVC.
 |---|---|---|
 | SQL Injection via concatenação de string | models.py | CRITICAL |
 | SECRET_KEY hardcoded | app.py | CRITICAL |
-| Senha comparada em texto plano | models.py | HIGH |
+| Senha armazenada em texto plano (sem hash) | models.py | HIGH |
 | Lógica de negócio fora de controllers dedicados | models.py | HIGH |
-| Magic numbers em cálculos de preço | controllers.py | LOW |
+| N+1 queries em relatório de vendas | models.py | MEDIUM |
+| N+1 queries em listagem de pedidos por usuário | models.py | MEDIUM |
+| Magic numbers em cálculos de desconto | models.py | LOW |
+| Print de debug em produção | controllers.py | LOW |
 
 ### ecommerce-api-legacy — Perfil: PARCIALMENTE_ORGANIZADO
 
@@ -37,11 +40,14 @@ análise, auditoria e refatoração de projetos legados para o padrão MVC.
 **Problemas identificados:**
 | Anti-Pattern | Arquivo | Severidade |
 |---|---|---|
-| Credenciais de produção hardcoded | utils.js | CRITICAL |
+| Credenciais de produção hardcoded (DB + gateway de pagamento) | utils.js | CRITICAL |
+| Criptografia caseira `badCrypto()` trivialmente reversível | utils.js | CRITICAL |
 | God Class com 5+ responsabilidades | AppManager.js | HIGH |
-| Lógica de negócio nas rotas | AppManager.js | HIGH |
-| SQL via concatenação | AppManager.js | CRITICAL |
-| N+1 queries em listagem | AppManager.js | MEDIUM |
+| Lógica de negócio nas rotas (handler checkout 60+ linhas) | AppManager.js | HIGH |
+| N+1 queries em financial-report (loop por curso) | AppManager.js | MEDIUM |
+| N+1 queries em matrículas (query por aluno dentro do loop) | AppManager.js | MEDIUM |
+| `console.log` imprime número de cartão e chave de gateway | AppManager.js | LOW |
+| Estado global mutável `globalCache` / `totalRevenue` | utils.js | LOW |
 
 ### task-manager-api — Perfil: ESTRUTURADO_COM_PROBLEMAS
 
@@ -57,9 +63,13 @@ análise, auditoria e refatoração de projetos legados para o padrão MVC.
 | Anti-Pattern | Arquivo | Severidade |
 |---|---|---|
 | SECRET_KEY hardcoded | app.py | CRITICAL |
-| Lógica de negócio nas routes | routes/task_routes.py | HIGH |
-| `User.query.get()` deprecated | routes/user_routes.py | MEDIUM |
-| Validações duplicadas entre routes e utils | routes/ + utils/ | MEDIUM |
+| Lógica de negócio nas routes (task_routes 200+ linhas) | routes/task_routes.py | HIGH |
+| MD5 para hash de senha (trivialmente quebrável) | models/user.py | HIGH |
+| Lógica de autenticação e autorização inline nas routes | routes/user_routes.py | HIGH |
+| `User.query.get()` deprecated (SQLAlchemy 2.x) | routes/task_routes.py | MEDIUM |
+| Validações duplicadas entre routes e utils/helpers.py | routes/ + utils/ | MEDIUM |
+| Imports não utilizados (`sys`, `json`, `os`, `time`) | routes/task_routes.py | LOW |
+| Magic numbers em cálculos de produtividade | routes/report_routes.py | LOW |
 
 ---
 
